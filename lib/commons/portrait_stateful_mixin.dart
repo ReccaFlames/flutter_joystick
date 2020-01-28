@@ -10,11 +10,11 @@ mixin PortraitStatefulModeMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
+    super.dispose();
     _enableRotation();
   }
 }
 
-/// blocks rotation; sets orientation to: portrait
 void _portraitModeOnly() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
