@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_joystick/colors.dart';
 
 import 'commons/landscape_stateful_mixin.dart';
 
@@ -38,7 +39,7 @@ class SettingsPageState extends State<SettingsPage>
             title: Text('Colors'),
             trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {
-              print('navigate');
+              navigateToColorsPage();
             },
           ),
           ListTile(
@@ -59,6 +60,13 @@ class SettingsPageState extends State<SettingsPage>
           ),
         ],
       ),
+    );
+  }
+
+  navigateToColorsPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ColorsPage()),
     );
   }
 
