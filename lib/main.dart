@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_joystick/buttons_view.dart';
 import 'package:flutter_joystick/joystick.dart';
 
 import 'commons/landscape_stateful_mixin.dart';
@@ -40,9 +41,10 @@ class _MyHomePageState extends State<MyHomePage>
       body: SafeArea(
         child: Center(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Joystick(),
+              PadButtonsView(),
             ],
           ),
         ),
