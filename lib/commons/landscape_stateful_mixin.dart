@@ -11,10 +11,10 @@ mixin LandscapeStatefulModeMixin<T extends StatefulWidget> on State<T> {
   @override
   void dispose() {
     _enableRotation();
+    super.dispose();
   }
 }
 
-/// blocks rotation; sets orientation to: portrait
 void _landscapeModeOnly() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,

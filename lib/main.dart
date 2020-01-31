@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_joystick/buttons_view.dart';
 import 'package:flutter_joystick/joystick.dart';
+import 'package:flutter_joystick/settings.dart';
 import 'package:sensors/sensors.dart';
 
 import 'commons/json_sender.dart';
@@ -35,13 +36,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with LandscapeStatefulModeMixin<MyHomePage> {
-
   String url = 'https://jsonplaceholder.typicode.com/posts';
 
   bool _mode = false;
   bool _sendData = false;
-
-  List<double> _controlValues;
 
   AccelerometerEvent acceleration;
   StreamSubscription<AccelerometerEvent> _streamSubscription;
@@ -107,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage>
                   children: <Widget>[
                     Joystick(
                       onDirectionChanged: (double degrees, Offset offset) {
-                        if(!_mode) {
+                        if (!_mode) {
                           print('${offset.dx} , ${offset.dy}');
                           sendData(offset.dy, offset.dx, 0.0);
                         }
@@ -123,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage>
                   IconButton(
                       icon: Icon(Icons.settings),
                       color: Colors.grey,
-                      onPressed: () {})
+                      onPressed: () => navigateToSettingsPage()),
                 ],
               ),
             ],
@@ -132,6 +130,13 @@ class _MyHomePageState extends State<MyHomePage>
       ),
     );
     // Center is a layout widget. It takes a single child and positions it
+  }
+
+  navigateToSettingsPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsPage()),
+    );
   }
 
   sendData(y, x, rotate) {
@@ -145,7 +150,15 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void dispose() {
     super.dispose();
-    _streamSubscription?.cancel();
+    _streamSubscription.cancel();
+  }
+
+  Future readAccelerationData(AccelerometerEvent event) async {
+    if (_mode) {
+      acceleration = event;
+      print('${acceleration.x} , ${acceleration.y}');
+      sendData(acceleration.y, acceleration.x, 0.0);
+    }
   }
 
   @override
@@ -153,13 +166,7 @@ class _MyHomePageState extends State<MyHomePage>
     super.initState();
     _streamSubscription =
         accelerometerEvents.listen((AccelerometerEvent event) {
-          if(_mode) {
-            setState(() {
-              acceleration = event;
-              print('${acceleration.x} , ${acceleration.y}');
-              sendData(acceleration.y, acceleration.x, 0.0);
-            });
-          }
+      readAccelerationData(event);
     });
   }
 }
