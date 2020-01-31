@@ -31,8 +31,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with LandscapeStatefulModeMixin<MyHomePage> {
-
-  bool mode = false;
+  bool _mode = false;
+  bool _sendData = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,68 @@ class _MyHomePageState extends State<MyHomePage>
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Column(
             children: <Widget>[
-              Joystick(),
-              PadButtonsView(),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          'MODE',
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Switch(
+                            value: _mode,
+                            onChanged: (value) {
+                              _mode = value;
+                            }),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          'SEND',
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Switch(
+                            value: _sendData,
+                            onChanged: (value) {
+                              _sendData = value;
+                            }),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Joystick(),
+                    PadButtonsView(),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.settings),
+                      color: Colors.grey,
+                      onPressed: () {})
+                ],
+              ),
             ],
           ),
         ),
