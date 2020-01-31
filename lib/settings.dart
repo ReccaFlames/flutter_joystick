@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_joystick/colors.dart';
+import 'package:flutter_joystick/endpoint.dart';
 
 import 'commons/landscape_stateful_mixin.dart';
 
@@ -45,7 +46,13 @@ class SettingsPageState extends State<SettingsPage>
           ListTile(
             leading: Icon(Icons.code),
             title: Text('Endpoint'),
-            trailing: Text('$_url'),
+            trailing: Text(
+              '$_url',
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            onTap: () {
+              navigateToEditEndpointPage();
+            },
           ),
           ListTile(
             leading: Icon(Icons.developer_mode),
@@ -60,6 +67,13 @@ class SettingsPageState extends State<SettingsPage>
           ),
         ],
       ),
+    );
+  }
+
+  navigateToEditEndpointPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditEndpointPage()),
     );
   }
 
