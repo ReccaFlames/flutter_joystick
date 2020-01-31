@@ -1,8 +1,14 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_joystick/buttons_view.dart';
 import 'package:flutter_joystick/joystick.dart';
+import 'package:sensors/sensors.dart';
 
+import 'commons/json_sender.dart';
 import 'commons/landscape_stateful_mixin.dart';
+import 'movement.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,15 +21,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: MyHomePage(title: 'Flutter Joystick Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -31,8 +35,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with LandscapeStatefulModeMixin<MyHomePage> {
+
+  String url = 'https://jsonplaceholder.typicode.com/posts';
+
   bool _mode = false;
   bool _sendData = false;
+
+  List<double> _controlValues;
+
+  AccelerometerEvent acceleration;
+  StreamSubscription<AccelerometerEvent> _streamSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +70,12 @@ class _MyHomePageState extends State<MyHomePage>
                         Switch(
                             value: _mode,
                             onChanged: (value) {
-                              _mode = value;
+                              setState(() {
+                                _mode = value;
+                              });
+                              _mode
+                                  ? _streamSubscription.resume()
+                                  : _streamSubscription.pause();
                             }),
                       ],
                     ),
@@ -88,7 +105,14 @@ class _MyHomePageState extends State<MyHomePage>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Joystick(),
+                    Joystick(
+                      onDirectionChanged: (double degrees, Offset offset) {
+                        if(!_mode) {
+                          print('${offset.dx} , ${offset.dy}');
+                          sendData(offset.dy, offset.dx, 0.0);
+                        }
+                      },
+                    ),
                     PadButtonsView(),
                   ],
                 ),
@@ -110,8 +134,32 @@ class _MyHomePageState extends State<MyHomePage>
     // Center is a layout widget. It takes a single child and positions it
   }
 
+  sendData(y, x, rotate) {
+    if (_sendData) {
+      String json = jsonEncode(Movement(y, x, rotate));
+      JsonSender.createPost(json, url);
+      print('send');
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
+    _streamSubscription?.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _streamSubscription =
+        accelerometerEvents.listen((AccelerometerEvent event) {
+          if(_mode) {
+            setState(() {
+              acceleration = event;
+              print('${acceleration.x} , ${acceleration.y}');
+              sendData(acceleration.y, acceleration.x, 0.0);
+            });
+          }
+    });
   }
 }
