@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   sensors: ^0.4.1+7
   http: ^0.12.0+4
+  flutter_colorpicker: any
 
 dev_dependencies:
   flutter_test:
