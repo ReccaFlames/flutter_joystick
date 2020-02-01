@@ -7,6 +7,18 @@ class EditEndpointPage extends StatefulWidget {
   State<StatefulWidget> createState() => EditEndpointPageState();
 }
 
+final OutlineInputBorder border = OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+    borderSide: BorderSide(color: Colors.black));
+
+formFieldDecoration({String labelText}) {
+  return InputDecoration(
+    disabledBorder: border,
+    border: border,
+    labelText: labelText,
+  );
+}
+
 class EditEndpointPageState extends State<EditEndpointPage>
     with LandscapeStatefulModeMixin<EditEndpointPage> {
   @override
@@ -33,6 +45,14 @@ class EditEndpointPageState extends State<EditEndpointPage>
           )
         ],
       ),
+      body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: TextFormField(
+            decoration: formFieldDecoration(
+              labelText: 'Endpoint',
+            ),
+          ),
+        ),
     );
   }
 }
