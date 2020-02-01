@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_joystick/circle_swatch.dart';
 import 'package:flutter_joystick/commons/dialogs.dart';
 import 'package:flutter_joystick/commons/landscape_stateful_mixin.dart';
+import 'package:flutter_joystick/components/circle_swatch.dart';
 
 class ColorsPage extends StatefulWidget {
   @override

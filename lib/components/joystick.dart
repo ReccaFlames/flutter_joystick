@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'circle_view.dart';
 
+
 typedef JoystickDirectionCallback = void Function(
     double degrees, Offset offset);
 

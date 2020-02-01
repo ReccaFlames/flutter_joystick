@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_joystick/buttons_view.dart';
-import 'package:flutter_joystick/joystick.dart';
-import 'package:flutter_joystick/settings.dart';
+import 'package:flutter_joystick/components/buttons_view.dart';
+import 'package:flutter_joystick/components/joystick.dart';
+import 'package:flutter_joystick/pages/settings.dart';
 import 'package:sensors/sensors.dart';
 
-import 'commons/json_sender.dart';
-import 'commons/landscape_stateful_mixin.dart';
-import 'movement.dart';
+import '../commons/json_sender.dart';
+import '../commons/landscape_stateful_mixin.dart';
+import '../models/movement.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);

@@ -2,7 +2,7 @@ import 'dart:math' as _math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_joystick/pad_button.dart';
+import 'package:flutter_joystick/components/pad_button.dart';
 
 typedef PadButtonPressedCallback = void Function(
     int buttonIndex, String gesture);

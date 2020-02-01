@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_joystick/colors.dart';
-import 'package:flutter_joystick/endpoint.dart';
+import 'package:flutter_joystick/pages/endpoint.dart';
 
-import 'commons/landscape_stateful_mixin.dart';
+import '../commons/landscape_stateful_mixin.dart';
+import 'colors.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key key}) : super(key: key);
