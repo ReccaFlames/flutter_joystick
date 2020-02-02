@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_joystick/commons/shared_preferences_helper.dart';
 import 'package:flutter_joystick/pages/endpoint.dart';
 
 import '../commons/landscape_stateful_mixin.dart';
@@ -15,7 +16,7 @@ class SettingsPage extends StatefulWidget {
 class SettingsPageState extends State<SettingsPage>
     with LandscapeStatefulModeMixin<SettingsPage> {
   bool _devMode = false;
-  String _url = 'https://jsonplaceholder.typicode.com/posts';
+  String _endpointUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class SettingsPageState extends State<SettingsPage>
             leading: Icon(Icons.code),
             title: Text('Endpoint'),
             trailing: Text(
-              '$_url',
+              _endpointUrl,
               style: TextStyle(color: Colors.grey[700]),
             ),
             onTap: () {
@@ -74,7 +75,9 @@ class SettingsPageState extends State<SettingsPage>
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => EditEndpointPage()),
-    );
+    ).then((value) {
+      fetchUrlData();
+    });
   }
 
   navigateToColorsPage() {
@@ -98,5 +101,14 @@ class SettingsPageState extends State<SettingsPage>
   @override
   void initState() {
     super.initState();
+    fetchUrlData();
+  }
+
+  void fetchUrlData() {
+    SharedPreferencesHelper.getEndpointUrl().then((url) {
+      setState(() {
+        _endpointUrl = url;
+      });
+    });
   }
 }

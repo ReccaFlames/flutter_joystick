@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with LandscapeStatefulModeMixin<HomePage> {
-  String url = 'https://jsonplaceholder.typicode.com/posts';
+  String endpointUrl = 'https://jsonplaceholder.typicode.com/posts';
 
   Color joystickColor;
   Color backgroundColor;
@@ -35,12 +35,11 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    fetchBuildData();
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Container(
-            color: backgroundColor,
+      body: Container(
+        color: backgroundColor,
+        child: SafeArea(
+          child: Center(
             child: Column(
               children: <Widget>[
                 Center(
@@ -132,13 +131,15 @@ class _HomePageState extends State<HomePage>
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SettingsPage()),
-    );
+    ).then((onValue) {
+      fetchBuildData();
+    });
   }
 
   sendData(y, x, rotate) {
     if (_sendData) {
       String json = jsonEncode(Movement(y, x, rotate));
-      JsonSender.createPost(json, url);
+      JsonSender.createPost(json, endpointUrl);
       print('send');
     }
   }
@@ -158,21 +159,26 @@ class _HomePageState extends State<HomePage>
   }
 
   void fetchBuildData() {
-    SharedPreferencesHelper.getJoystickColor().then((onValue) {
-      joystickColor = onValue;
+    SharedPreferencesHelper.getJoystickColor().then((color) {
+      joystickColor = color;
     });
-    SharedPreferencesHelper.getBackgroundColor().then((onValue) {
-      backgroundColor = onValue;
+    SharedPreferencesHelper.getBackgroundColor().then((color) {
+      backgroundColor = color;
+    });
+    SharedPreferencesHelper.getEndpointUrl().then((url) {
+      endpointUrl = url;
     });
   }
 
   void startup() async {
     Color joystick = await SharedPreferencesHelper.getJoystickColor();
     Color background = await SharedPreferencesHelper.getBackgroundColor();
+    String url = await SharedPreferencesHelper.getEndpointUrl();
 
     setState(() {
       joystickColor = joystick;
       backgroundColor = background;
+      endpointUrl = url;
     });
   }
 

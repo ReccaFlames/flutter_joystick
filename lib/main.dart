@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Joystick',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.yellow,
       ),
       home: HomePage(),
     );
