@@ -16,6 +16,8 @@ class PadButtonsView extends StatelessWidget {
 
   final double buttonsPadding;
 
+  final Color buttonColor;
+
   PadButtonsView({
     this.size,
     this.buttons = const [
@@ -24,6 +26,7 @@ class PadButtonsView extends StatelessWidget {
     ],
     this.padButtonPressedCallback,
     this.buttonsPadding = 0,
+    this.buttonColor = Colors.red,
   });
 
   @override
@@ -92,11 +95,11 @@ class PadButtonsView extends StatelessWidget {
                 height: innerCircleSize,
                 child: Center(
                   child: (button.buttonText != null)
-                      ? Text(button.buttonText)
+                      ? Text(button.buttonText,style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),)
                       : null,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: buttonColor,
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.black26,

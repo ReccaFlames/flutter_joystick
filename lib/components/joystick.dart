@@ -26,8 +26,8 @@ class Joystick extends StatelessWidget {
   Joystick({
     this.size,
     this.onDirectionChanged,
-    this.backgroundColor = Colors.blueGrey,
-    this.innerCircleColor = Colors.blueGrey,
+    this.backgroundColor = Colors.black54,
+    this.innerCircleColor = Colors.black54,
     this.opacity,
     this.interval,
   });

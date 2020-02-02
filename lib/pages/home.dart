@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_joystick/commons/shared_preferences_helper.dart';
 import 'package:flutter_joystick/components/buttons_view.dart';
 import 'package:flutter_joystick/components/joystick.dart';
 import 'package:flutter_joystick/pages/settings.dart';
@@ -22,6 +23,9 @@ class _HomePageState extends State<HomePage>
     with LandscapeStatefulModeMixin<HomePage> {
   String url = 'https://jsonplaceholder.typicode.com/posts';
 
+  Color joystickColor;
+  Color backgroundColor;
+
   bool _mode = false;
   bool _sendData = false;
 
@@ -31,84 +35,92 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    fetchBuildData();
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: <Widget>[
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          child: Container(
+            color: backgroundColor,
+            child: Column(
+              children: <Widget>[
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            'MODE',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Switch(
+                              value: _mode,
+                              onChanged: (value) {
+                                setState(() {
+                                  _mode = value;
+                                });
+                                _mode
+                                    ? _streamSubscription.resume()
+                                    : _streamSubscription.pause();
+                              }),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            'SEND',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Switch(
+                              value: _sendData,
+                              onChanged: (value) {
+                                _sendData = value;
+                              }),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Joystick(
+                        backgroundColor: joystickColor,
+                        innerCircleColor: joystickColor,
+                        onDirectionChanged: (double degrees, Offset offset) {
+                          if (!_mode) {
+                            print('${offset.dx} , ${offset.dy}');
+                            sendData(offset.dy, offset.dx, 0.0);
+                          }
+                        },
+                      ),
+                      PadButtonsView(
+                        buttonColor: joystickColor,
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          'MODE',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Switch(
-                            value: _mode,
-                            onChanged: (value) {
-                              setState(() {
-                                _mode = value;
-                              });
-                              _mode
-                                  ? _streamSubscription.resume()
-                                  : _streamSubscription.pause();
-                            }),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          'SEND',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Switch(
-                            value: _sendData,
-                            onChanged: (value) {
-                              _sendData = value;
-                            }),
-                      ],
-                    ),
+                    IconButton(
+                        icon: Icon(Icons.settings),
+                        color: Colors.white,
+                        onPressed: () => navigateToSettingsPage()),
                   ],
                 ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Joystick(
-                      onDirectionChanged: (double degrees, Offset offset) {
-                        if (!_mode) {
-                          print('${offset.dx} , ${offset.dy}');
-                          sendData(offset.dy, offset.dx, 0.0);
-                        }
-                      },
-                    ),
-                    PadButtonsView(),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  IconButton(
-                      icon: Icon(Icons.settings),
-                      color: Colors.grey,
-                      onPressed: () => navigateToSettingsPage()),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -145,6 +157,25 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+  void fetchBuildData() {
+    SharedPreferencesHelper.getJoystickColor().then((onValue) {
+      joystickColor = onValue;
+    });
+    SharedPreferencesHelper.getBackgroundColor().then((onValue) {
+      backgroundColor = onValue;
+    });
+  }
+
+  void startup() async {
+    Color joystick = await SharedPreferencesHelper.getJoystickColor();
+    Color background = await SharedPreferencesHelper.getBackgroundColor();
+
+    setState(() {
+      joystickColor = joystick;
+      backgroundColor = background;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -152,5 +183,6 @@ class _HomePageState extends State<HomePage>
         accelerometerEvents.listen((AccelerometerEvent event) {
       readAccelerationData(event);
     });
+    startup();
   }
 }

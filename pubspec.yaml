@@ -26,6 +26,7 @@ dependencies:
   sensors: ^0.4.1+7
   http: ^0.12.0+4
   flutter_colorpicker: any
+  shared_preferences: ^0.5.6+1
 
 dev_dependencies:
   flutter_test:
