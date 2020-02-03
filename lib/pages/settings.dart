@@ -48,7 +48,7 @@ class SettingsPageState extends State<SettingsPage>
             leading: Icon(Icons.code),
             title: Text('Endpoint'),
             trailing: Text(
-              _endpointUrl,
+              _endpointUrl??'',
               style: TextStyle(color: Colors.grey[700]),
             ),
             onTap: () {
