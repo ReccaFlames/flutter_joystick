@@ -12,7 +12,7 @@ class PadButtonsView extends StatelessWidget {
 
   final List<PadButton> buttons;
 
-  final PadButtonPressedCallback padButtonPressedCallback;
+  final PadButtonPressedCallback onButtonPressed;
 
   final double buttonsPadding;
 
@@ -24,7 +24,7 @@ class PadButtonsView extends StatelessWidget {
       PadButton(index: 0, buttonText: "R"),
       PadButton(index: 1, buttonText: "L"),
     ],
-    this.padButtonPressedCallback,
+    this.onButtonPressed,
     this.buttonsPadding = 0,
     this.buttonColor = Colors.red,
   });
@@ -68,25 +68,25 @@ class PadButtonsView extends StatelessWidget {
         builder: (context, setState) {
           return GestureDetector(
             onTap: () {
-              print('onTap');
+              _processGesture(button, 'onTap');
             },
             onTapUp: (details) {
-              print('onTapUp');
+              _processGesture(button, 'onTapUp');
             },
             onTapDown: (details) {
-              print('onTapDown');
+              _processGesture(button, 'onTapDown');
             },
             onTapCancel: () {
-              print('onTapCancel');
+              _processGesture(button, 'onTapCancel');
             },
             onLongPress: () {
-              print('onLongPress');
+              _processGesture(button, 'onLongPress');
             },
             onLongPressStart: (details) {
-              print('onLongPressStart');
+              _processGesture(button, 'onLongPressStart');
             },
             onLongPressUp: () {
-              print('onLongPressUp');
+              _processGesture(button, 'onLongPressUp');
             },
             child: Padding(
               padding: const EdgeInsets.all(0),
@@ -122,6 +122,12 @@ class PadButtonsView extends StatelessWidget {
       top: _calculatePositionY(index, innerCircleSize, actualSize),
       left: _calculatePositionX(index, innerCircleSize, actualSize),
     );
+  }
+
+  void _processGesture(PadButton button, String gesture) {
+    if(onButtonPressed != null) {
+      onButtonPressed(button.index, gesture);
+    }
   }
 
   double _calculatePositionX(

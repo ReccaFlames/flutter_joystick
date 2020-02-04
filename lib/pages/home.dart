@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage>
 
   bool _mode = false;
   bool _sendData = false;
+  double _rotate = 0.0;
 
   AccelerometerEvent acceleration;
   StreamSubscription<AccelerometerEvent> _streamSubscription;
@@ -99,13 +100,24 @@ class _HomePageState extends State<HomePage>
                         innerCircleColor: joystickColor,
                         onDirectionChanged: (double degrees, Offset offset) {
                           if (!_mode) {
-                            print('${offset.dx} , ${offset.dy}');
-                            sendData(offset.dy, offset.dx, 0.0);
+                            sendData(offset.dy, offset.dx, _rotate);
                           }
                         },
                       ),
                       PadButtonsView(
                         buttonColor: joystickColor,
+                        onButtonPressed: (index, event) {
+                          if(event == 'onTapDown' ) {
+                            if(index == 0) {
+                              _rotate = 1.0;
+                            } else if(index == 1) {
+                              _rotate = -1.0;
+                            }
+                          } else if(event == 'onLongPressUp') {
+                            _rotate = 0.0;
+                          }
+                          sendData(0.0, 0.0, _rotate);
+                        },
                       ),
                     ],
                   ),
@@ -151,7 +163,6 @@ class _HomePageState extends State<HomePage>
     if (_sendData) {
       String json = jsonEncode(Movement(y, x, rotate));
       JsonSender.createPost(json, endpointUrl);
-      print('send');
     }
   }
 
@@ -164,8 +175,7 @@ class _HomePageState extends State<HomePage>
   Future readAccelerationData(AccelerometerEvent event) async {
     if (_mode) {
       acceleration = event;
-      print('${acceleration.x} , ${acceleration.y}');
-      sendData(acceleration.y, acceleration.x, 0.0);
+      sendData(acceleration.y, acceleration.x, _rotate);
     }
   }
 
