@@ -33,7 +33,14 @@ class Dialogs {
             ),
             actions: <Widget>[
               FlatButton(
-                child: const Text('Got it'),
+                child: const Text(
+                  'Got it!',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop(pickerColor);
                 },

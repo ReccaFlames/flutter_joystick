@@ -21,6 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with LandscapeStatefulModeMixin<HomePage> {
+  String _imgPath = 'https://cdn.freebiesupply.com/logos/large/2x/sabre-2-logo-black-and-white.png';
   String endpointUrl = 'https://jsonplaceholder.typicode.com/posts';
 
   Color joystickColor;
@@ -112,6 +113,16 @@ class _HomePageState extends State<HomePage>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    SizedBox(
+                      width: 60.0,
+                    ),
+                    Expanded(
+                      child: Image.network(
+                        _imgPath,
+                        width: 50.0,
+                        height: 50.0,
+                      ),
+                    ),
                     IconButton(
                         icon: Icon(Icons.settings),
                         color: Colors.white,
