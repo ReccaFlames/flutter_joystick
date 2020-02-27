@@ -15,7 +15,6 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage>
     with LandscapeStatefulModeMixin<SettingsPage> {
-  bool _devMode = false;
   String _endpointUrl;
 
   @override
@@ -55,17 +54,6 @@ class SettingsPageState extends State<SettingsPage>
               navigateToEditEndpointPage();
             },
           ),
-          ListTile(
-            leading: Icon(Icons.developer_mode),
-            title: Text('Developer mode'),
-            trailing: Switch(
-              value: _devMode,
-              onChanged: (value) => setDevMode(value),
-            ),
-            onTap: () {
-              setDevMode(!_devMode);
-            },
-          ),
         ],
       ),
     );
@@ -85,12 +73,6 @@ class SettingsPageState extends State<SettingsPage>
       context,
       MaterialPageRoute(builder: (context) => ColorsPage()),
     );
-  }
-
-  void setDevMode(bool value) {
-    setState(() {
-      _devMode = value;
-    });
   }
 
   @override
