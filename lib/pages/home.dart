@@ -147,7 +147,6 @@ class _HomePageState extends State<HomePage>
         ),
       ),
     );
-    // Center is a layout widget. It takes a single child and positions it
   }
 
   navigateToSettingsPage() {
